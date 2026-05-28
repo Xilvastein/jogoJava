@@ -7,41 +7,62 @@ import java.net.URL;
 
 public class Scene extends JPanel {
 
+    // Imagem de fundo do cenário atual
     private Image bg;
 
+    // Controle da cena atual do jogo
     private int cenaAtual = 0;
 
+    // Sistema de pontuação (começa em 0 e não muda automaticamente)
+    private int pontos = 0;
+
+    // Painel de diálogo inferior
     private JPanel caixaDialogo;
+
+    // Texto exibido no diálogo
     private JTextArea textoDialogo;
 
+    // Label da pontuação no canto superior direito
+    private JLabel labelPontos;
+
+    // Botão para avançar cena
     private JButton btnProxima;
+
+    // Botão de continuar na introdução
     private JButton btnContinuar;
 
+    // Botões do menu inicial
     private JButton btnIniciar;
     private JButton btnSair;
 
-    // OPÇÕES (VISUAIS APENAS)
+    // Botões de opção (visuais apenas por enquanto)
     private JButton opcao1;
     private JButton opcao2;
     private JButton opcao3;
 
     public Scene() {
 
+        // Usa layout manual (posição absoluta dos elementos)
         setLayout(null);
 
+        // Criação dos elementos da interface
         criarDialogo();
+        criarPontuacao();
         criarBotaoProxima();
         criarBotaoContinuar();
         criarMenuInicial();
         criarBotoesOpcao();
 
+        // Permite captura de teclado
         setFocusable(true);
 
+        // Evento de teclado para avanço com espaço
         addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
 
+                // Se apertar espaço na cena 1, avança para cena 2
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
                     if (cenaAtual == 1) {
@@ -52,26 +73,29 @@ public class Scene extends JPanel {
             }
         });
 
+        // Inicializa primeira cena
         setCena(cenaAtual);
     }
 
-    // troca cenário
+    // Troca o cenário do jogo
     public void setCena(int cena) {
 
         cenaAtual = cena;
 
+        // Caminho da imagem dentro do projeto
         String caminho = "/images/pixelarts/cenarios/cenario" + cena + ".png";
 
+        // Carrega imagem como recurso interno do projeto
         URL url = getClass().getResource(caminho);
 
         if (url != null) {
             bg = new ImageIcon(url).getImage();
         } else {
-            System.out.println("❌ Imagem não encontrada: " + caminho);
+            System.out.println("Imagem não encontrada: " + caminho);
             bg = null;
         }
 
-        // esconde tudo
+        // Esconde todos os elementos antes de mostrar os corretos
         caixaDialogo.setVisible(false);
         btnProxima.setVisible(false);
         btnContinuar.setVisible(false);
@@ -82,30 +106,37 @@ public class Scene extends JPanel {
         opcao2.setVisible(false);
         opcao3.setVisible(false);
 
-        // MENU
+        labelPontos.setVisible(false);
+
+        // Menu inicial
         if (cena == 0) {
 
             btnIniciar.setVisible(true);
             btnSair.setVisible(true);
         }
 
-        // INTRO
+        // Introdução do jogo
         else if (cena == 1) {
 
             btnContinuar.setVisible(true);
         }
 
-        // DIÁLOGOS + OPÇÕES VISUAIS
+        // Cenas principais com diálogo e opções
         else {
 
             caixaDialogo.setVisible(true);
-
             btnProxima.setVisible(true);
 
             opcao1.setVisible(true);
             opcao2.setVisible(true);
             opcao3.setVisible(true);
 
+            labelPontos.setVisible(true);
+
+            // Atualiza texto da pontuação sem alterar valor
+            atualizarPontuacao();
+
+            // Define o texto de cada cena
             switch (cena) {
 
                 case 2 -> textoDialogo.setText("Mariana: \"Ele controla minhas roupas...\"");
@@ -119,7 +150,7 @@ public class Scene extends JPanel {
         repaint();
     }
 
-    //  diálogo
+    // Cria o painel de diálogo inferior
     private void criarDialogo() {
 
         caixaDialogo = new JPanel();
@@ -141,7 +172,37 @@ public class Scene extends JPanel {
         add(caixaDialogo);
     }
 
-    // próxima cena (sempre à direita das opções)
+    // Cria label de pontuação
+    private void criarPontuacao() {
+
+        labelPontos = new JLabel("Pontuação: 0");
+        labelPontos.setForeground(Color.WHITE);
+        labelPontos.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        atualizarFontePontuacao();
+
+        add(labelPontos);
+    }
+
+    // Atualiza o texto da pontuação
+    private void atualizarPontuacao() {
+
+        labelPontos.setText("Pontuação: " + pontos);
+    }
+
+    // Ajusta fonte da pontuação dependendo do tamanho da tela
+    private void atualizarFontePontuacao() {
+
+        int largura = getWidth();
+
+        if (largura >= 1200) {
+            labelPontos.setFont(new Font("Monospaced", Font.BOLD, 26));
+        } else {
+            labelPontos.setFont(new Font("Monospaced", Font.BOLD, 16));
+        }
+    }
+
+    // Cria botão de próxima cena
     private void criarBotaoProxima() {
 
         btnProxima = new JButton("Próxima Cena");
@@ -161,7 +222,7 @@ public class Scene extends JPanel {
         caixaDialogo.add(btnProxima);
     }
 
-    // continuar
+    // Cria botão de continuar na introdução
     private void criarBotaoContinuar() {
 
         btnContinuar = new JButton("[ESPAÇO] Continuar");
@@ -175,7 +236,7 @@ public class Scene extends JPanel {
         add(btnContinuar);
     }
 
-    //  menu
+    // Cria menu inicial
     private void criarMenuInicial() {
 
         btnIniciar = new JButton("Iniciar Jogo");
@@ -196,7 +257,7 @@ public class Scene extends JPanel {
         add(btnSair);
     }
 
-    // ⭐ OPÇÕES (SEM AÇÃO)
+    // Cria botões de opção (sem funcionalidade ainda)
     private void criarBotoesOpcao() {
 
         opcao1 = new JButton("Opção 1");
@@ -207,7 +268,7 @@ public class Scene extends JPanel {
         estiloBotao(opcao2);
         estiloBotao(opcao3);
 
-        // ❗ NÃO FAZEM NADA AINDA
+        // Ainda não possuem lógica de escolha
         opcao1.addActionListener(e -> {});
         opcao2.addActionListener(e -> {});
         opcao3.addActionListener(e -> {});
@@ -217,7 +278,7 @@ public class Scene extends JPanel {
         caixaDialogo.add(opcao3);
     }
 
-    //  estilo padrão
+    // Define estilo padrão dos botões
     private void estiloBotao(JButton btn) {
 
         btn.setBackground(Color.BLACK);
@@ -227,7 +288,7 @@ public class Scene extends JPanel {
         btn.setFont(new Font("Monospaced", Font.BOLD, 13));
     }
 
-    //  layout (PRÓXIMA SEMPRE À DIREITA)
+    // Atualiza layout dos elementos na tela
     private void atualizarLayout() {
 
         int largura = getWidth();
@@ -239,20 +300,25 @@ public class Scene extends JPanel {
 
         int y = 90;
 
-        //  OPÇÕES primeiro (centro)
         opcao1.setBounds(largura / 2 - 220, y, 120, 45);
         opcao2.setBounds(largura / 2 - 90, y, 120, 45);
         opcao3.setBounds(largura / 2 + 40, y, 120, 45);
 
-        //  PRÓXIMA CENA SEMPRE À DIREITA
         btnProxima.setBounds(largura / 2 + 170, y, 160, 45);
 
         btnIniciar.setBounds(largura / 2 - 120, altura - 220, 240, 50);
         btnSair.setBounds(largura / 2 - 120, altura - 150, 240, 50);
 
         btnContinuar.setBounds(20, altura - 70, 220, 38);
+
+        int larguraLabel = (largura >= 1200) ? 320 : 220;
+
+        labelPontos.setBounds(largura - larguraLabel - 20, 20, larguraLabel, 50);
+
+        atualizarFontePontuacao();
     }
 
+    // Renderização do painel
     @Override
     protected void paintComponent(Graphics g) {
 
