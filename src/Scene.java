@@ -20,7 +20,7 @@ public class Scene extends JPanel {
     private JButton btnIniciar;
     private JButton btnSair;
 
-    // ⭐ OPÇÕES (VISUAIS APENAS)
+    // OPÇÕES (VISUAIS APENAS)
     private JButton opcao1;
     private JButton opcao2;
     private JButton opcao3;
@@ -55,7 +55,7 @@ public class Scene extends JPanel {
         setCena(cenaAtual);
     }
 
-    // 🎮 troca cenário
+    // troca cenário
     public void setCena(int cena) {
 
         cenaAtual = cena;
@@ -119,7 +119,7 @@ public class Scene extends JPanel {
         repaint();
     }
 
-    // 💬 diálogo
+    //  diálogo
     private void criarDialogo() {
 
         caixaDialogo = new JPanel();
@@ -141,7 +141,7 @@ public class Scene extends JPanel {
         add(caixaDialogo);
     }
 
-    // 🔘 próxima cena (sempre à direita das opções)
+    // próxima cena (sempre à direita das opções)
     private void criarBotaoProxima() {
 
         btnProxima = new JButton("Próxima Cena");
@@ -161,7 +161,7 @@ public class Scene extends JPanel {
         caixaDialogo.add(btnProxima);
     }
 
-    // 🔘 continuar
+    // continuar
     private void criarBotaoContinuar() {
 
         btnContinuar = new JButton("[ESPAÇO] Continuar");
@@ -175,7 +175,7 @@ public class Scene extends JPanel {
         add(btnContinuar);
     }
 
-    // 🎮 menu
+    //  menu
     private void criarMenuInicial() {
 
         btnIniciar = new JButton("Iniciar Jogo");
@@ -217,7 +217,7 @@ public class Scene extends JPanel {
         caixaDialogo.add(opcao3);
     }
 
-    // 🎨 estilo padrão
+    //  estilo padrão
     private void estiloBotao(JButton btn) {
 
         btn.setBackground(Color.BLACK);
@@ -227,7 +227,7 @@ public class Scene extends JPanel {
         btn.setFont(new Font("Monospaced", Font.BOLD, 13));
     }
 
-    // 📐 layout (PRÓXIMA SEMPRE À DIREITA)
+    //  layout (PRÓXIMA SEMPRE À DIREITA)
     private void atualizarLayout() {
 
         int largura = getWidth();
@@ -239,12 +239,12 @@ public class Scene extends JPanel {
 
         int y = 90;
 
-        // 📌 OPÇÕES primeiro (centro)
+        //  OPÇÕES primeiro (centro)
         opcao1.setBounds(largura / 2 - 220, y, 120, 45);
         opcao2.setBounds(largura / 2 - 90, y, 120, 45);
         opcao3.setBounds(largura / 2 + 40, y, 120, 45);
 
-        // 📌 PRÓXIMA CENA SEMPRE À DIREITA
+        //  PRÓXIMA CENA SEMPRE À DIREITA
         btnProxima.setBounds(largura / 2 + 170, y, 160, 45);
 
         btnIniciar.setBounds(largura / 2 - 120, altura - 220, 240, 50);
